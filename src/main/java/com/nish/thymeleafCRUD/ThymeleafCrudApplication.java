@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nish.thymleafCRUD.controller.EmployeeController;
+import com.nish.thymeleafCRUD.controller.EmployeeController;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = EmployeeController.class)
