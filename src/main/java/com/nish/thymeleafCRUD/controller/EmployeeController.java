@@ -80,12 +80,13 @@ public class EmployeeController {
 		return "addEmp";
 	}
 	
-	@RequestMapping(value="/delete/id",method= {RequestMethod.POST})
+	@RequestMapping(value="/delete/{id}",method= {RequestMethod.GET})
 	public String deleteEmployeeById(@PathVariable("id") int id) {
-		HttpPost postRequest = new HttpPost("http://localhost:1234/employee/delete/"+id);
+		HttpGet getRequest = new HttpGet("http://localhost:1234/employee/delete/"+id);
+		getRequest.setHeader("Authorization", "Bearer "+TOKEN);
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		try {
-			HttpResponse response = httpClient.execute(postRequest);
+			HttpResponse response = httpClient.execute(getRequest);
 			System.out.println(response);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
