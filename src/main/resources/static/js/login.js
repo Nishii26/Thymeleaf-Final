@@ -31,7 +31,19 @@
 //	}
 //}
 
-function delete(id)
+function edit(id)
 {
-	console.log(id);
+	$.ajax({
+      url: '/edit/'+id,
+      method: 'GET',
+      success: function (data) {
+    	  $('#edit-modaldiv').html(data);
+          $('#updateModal').modal();
+          $('#updateModal').modal('show');
+      },
+      fail : function( jqXHR, textStatus ) {
+       alert( "Request failed: " + textStatus );
+     }
+  })
+	
 }

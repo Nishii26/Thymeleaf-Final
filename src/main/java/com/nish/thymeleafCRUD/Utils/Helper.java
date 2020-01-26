@@ -49,6 +49,26 @@ public class Helper {
 	    return mapper.readValue(entity, genericClass);
 	}
 	
+	public <T> void ApiCallPostWithToken(String url,String token ,String json,Class<T> genericClass)throws IOException
+	{
+		StringEntity input = null;
+		try {
+			input = new StringEntity(json);
+			input.setContentType("application/json");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		HttpPost postRequest = new HttpPost(url);
+		postRequest.setHeader("Authorization","Bearer "+token);
+		postRequest.setEntity(input);
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpResponse response = httpClient.execute(postRequest);
+		System.out.println(response);
+		String contents = EntityUtils.toString(response.getEntity());
+		System.out.println(contents);
+		ObjectMapper mapper = new ObjectMapper();
+	}
+	
 	public <T, genericClass> List<genericClass>  ApiCallGet(String url, String token,Class<T> genericClass) throws IOException
 	{
 		
@@ -60,6 +80,17 @@ public class Helper {
 		ObjectMapper mapper = new ObjectMapper();
 		List<genericClass> list = mapper.readValue(contents, new TypeReference<List<genericClass>>() {});
 		return list;
+	}
+	
+	public <T>  T ApiCallGetById(String url, String token,Class<T> genericClass) throws IOException
+	{
+		HttpGet getRequest = new HttpGet(url);
+		getRequest.setHeader("Authorization", "Bearer "+token);
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpResponse response = httpClient.execute(getRequest);
+		String contents = EntityUtils.toString(response.getEntity());
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(contents, genericClass);
 	}
 	
 

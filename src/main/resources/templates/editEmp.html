@@ -1,66 +1,10 @@
-<!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{fragments/layout}">
-<head>
-    <title>List Of All Employees</title>
-<script data-require="jquery@*" data-semver="2.0.3" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script> 
-</head>
-<body>
-	<div layout:fragment="content" th:remove="tag">
-	<td><a href="#addModal" data-toggle="modal" class="btn btn-success" data-target="#myModalCreate">Add</a></td>
-	<table class="table table-striped table-responsive-md">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Phone No</th>
-				<th>Edit</th>
-				<th>Delete</th>
-			</tr>
-		</thead>
-			<tbody>
-				<tr th:each="empList : ${list}">
-					<td th:text="${empList.id}"></td>
-					<td th:text="${empList.name}"></td>
-					<td th:text="${empList.email_}"></td>
-					<td th:text="${empList.contactno}"></td>
-					<td><button type="button" class="btn btn-sucess" id="${empList.id}" th:attr="id=${empList.id }" onclick="edit(id)">Edit</button>
-					<!-- <a th:href="@{/edit/(id=${empList.id})}"class="btn btn-success"><i class="fas fa-user-edit ml-2"></i></a></td> -->
-					<td><a href="#deleteModal" data-toggle="modal" class="btn btn-danger" id="${empList.id}" th:attr="id=${empList.id }" data-target="#delete-modal">Delete</a></td>
-				</tr>
-			</tbody>
-	</table>
-	<!--#Modal for delete employee-->
-	<div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Delete</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this employee?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" id="delete_btn" class="btn btn-primary">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-     <!--#Modal for employee create-->
-            <div class="myFormCreate">
-                <form th:action="@{/save}" th:object="${createEmployee}" method="post">
-                    <div class="modal fade" id="myModalCreate" tabindex="-1" role="dialog" aria-labelledby="modalLabelCreate" aria-hidden="true">
+<!--#Modal form for user update-->
+                    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
+                         <form th:action="@{/saveEdit}" method="post" th:object="${editEmployee}">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalLabelCreate">Create Employee Record</h5>
+                                    <h5 class="modal-title" id="updateModalLabel">Update User</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -69,7 +13,10 @@
                                     <p class="alert alert-info">
                                         Input data to the fields
                                     </p>
-                                    
+                                    <div class="form-group">
+                                        <label for="id" class="col-form-label">ID:</label>
+                                        <input type="text" class="form-control" th:field ="*{id}" id="id" name="id" value=""/>
+                                    </div>
                                      <div class="form-group">
                                         <label for="name" class="col-form-label">Name:</label>
                                         <input type="text" class="form-control" th:field ="*{name}" id="name" name="name" value=""/>
@@ -112,34 +59,7 @@
                                     <input type="submit" class="btn btn-primary" value="Save"/>
                                 </div>
                             </div>
+                           </form>
                         </div>
                     </div>
-                </form>
-            </div>
-            <!--End form-->
-            <div id="edit-modaldiv"></div>
-	<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script> -->
-    <script>
-        $('#delete-modal').on('show.bs.modal', function(e) {
-            var $modal = $(this),
-                empId = e.relatedTarget.id;
-            	console.log(empId)
-            	$(document).on("click", "#delete_btn", function(event){
-                    $.ajax({
-				         url:'/delete/'+empId,
-				         method: 'GET',
-				         contentType: 'application/json',
-				         success: function (data) {
-				          $('#delete-modal').modal('toggle')
-				         },
-				         fail : function( jqXHR, textStatus ) {
-				          alert( "Request failed: " + textStatus );
-				        }
-				     })
-                });
-        })
-    </script>
-	<script type="text/javascript" th:src="@{/js/login.js}" src="../static/js/login.js"></script>
-	</div>	
-</body>
-</html>
+            <!--End update form-->
